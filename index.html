@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Reward Game</title>
+<style>
+  body { font-family: sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
+  .card { background: #1e1e1e; padding: 20px; border-radius: 12px; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+  .coin-box { font-size: 18px; color: #ffca28; margin-bottom: 20px; font-weight: bold; }
+  .question { font-size: 32px; margin: 20px 0; color: #4fc3f7; }
+  .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+  button { padding: 14px; font-size: 18px; border: none; border-radius: 8px; background: #2979ff; color: #fff; font-weight: bold; cursor: pointer; }
+  button:active { background: #1565c0; }
+  .wallet-section { margin-top: 25px; border-top: 1px solid #333; padding-top: 15px; }
+  .reward-btn { background: #00c853; width: 100%; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Math Reward Game</h2>
+  <div class="coin-box">Coins: <span id="coinCount">0</span></div>
+
+  <div class="question" id="qText">--</div>
+  <div class="btn-grid" id="optContainer"></div>
+
+  <div class="wallet-section">
+    <button class="reward-btn" onclick="rewardCoins()">Watch Bonus (+10 Coins)</button>
+  </div>
+</div>
+
+<script>
+let coins = 0;
+let num1, num2, answer;
+
+function generateQuestion() {
+  num1 = Math.floor(Math.random() * 20) + 1;
+  num2 = Math.floor(Math.random() * 20) + 1;
+  answer = num1 + num2;
+  document.getElementById('qText').innerText = num1 + " + " + num2 + " = ?";
+
+  let options = [answer];
+  while(options.length < 4) {
+    let wrong = answer + Math.floor(Math.random() * 7) - 3;
+    if(wrong >= 0 && !options.includes(wrong)) {
+      options.push(wrong);
+    }
+  }
+  options.sort(() => Math.random() - 0.5);
+
+  let container = document.getElementById('optContainer');
+  container.innerHTML = "";
+  options.forEach(opt => {
+    let btn = document.createElement('button');
+    btn.innerText = opt;
+    btn.onclick = () => checkAnswer(opt);
+    container.appendChild(btn);
+  });
+}
+
+function checkAnswer(selected) {
+  if(selected === answer) {
+    coins += 5;
+    alert("Correct! +5 Coins");
+  } else {
+    alert("Wrong answer, try next!");
+  }
+  document.getElementById('coinCount').innerText = coins;
+  generateQuestion();
+}
+
+function rewardCoins() {
+  coins += 10;
+  document.getElementById('coinCount').innerText = coins;
+  alert("Bonus +10 Coins Added!");
+}
+
+generateQuestion();
+</script>
+</body>
+</html>
