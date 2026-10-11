@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Math Rewards - Quiz &amp; Game Coins</title>
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --card-bg: rgba(22, 28, 45, 0.85);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --accent-gold: #f59e0b;
+      --gold-glow: rgba(245, 158, 11, 0.4);
+      --emerald: #10b981;
+      --rose: #ef4444;
+      --cyan: #06b6d4;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 40%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 24px;
+    }
+
+    /* Header & Balance Bar */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 30%, #c7d2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .coin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.1));
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: #fde68a;
+      box-shadow: 0 0 15px var(--gold-glow);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .coin-badge:active {
+      transform: scale(0.96);
+    }
+
+    /* Shiny Rotating/Shimmer Coin Icon */
+    .coin-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fbbf24, #d97706);
+      border: 1.5px solid #fef3c7;
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+      position: relative;
+      overflow: hidden;
+      font-size: 11px;
+      font-weight: 900;
+      color: #78350f;
+    }
+
+    .coin-icon::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent 35%, rgba(255, 255, 255, 0.7) 50%, transparent 65%);
+      transform: rotate(25deg);
+      animation: coinShine 3s infinite;
+    }
+
+    @keyframes coinShine {
+      0%, 70% { transform: translateX(-100%) rotate(25deg); }
+      100% { transform: translateX(100%) rotate(25deg); }
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--card-border);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* Content Panes */
+    .tab-pane {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tab-pane.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Categories Selector */
+    .category-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .cat-chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .cat-chip.selected {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      color: #a5b4fc;
+    }
+
+    /* Quiz Header (Timer & Stats) */
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Timer Bar */
+    .timer-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, var(--emerald), var(--cyan));
+      border-radius: 999px;
+      transition: width 1s linear, background-color 0.3s ease;
+    }
+
+    .timer-bar.warning {
+      background: var(--accent-gold);
+    }
+
+    .timer-bar.danger {
+      background: var(--rose);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.7);
+    }
+
+    /* Question Display */
+    .question-card {
+      text-align: center;
+      padding: 30px 16px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .question-prompt {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .question-expr {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .feedback-banner {
+      min-height: 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-top: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .feedback-banner.correct {
+      color: var(--emerald);
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .feedback-banner.wrong {
+      color: var(--rose);
+      text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+    }
+
+    /* Answer Option Buttons */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      padding: 18px 12px;
+      font-size: 1.35rem;
+      font-weight: 800;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .option-btn:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .option-btn.btn-correct {
+      background: var(--emerald) !important;
+      border-color: #34d399 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.6) !important;
+    }
+
+    .option-btn.btn-wrong {
+      background: var(--rose) !important;
+      border-color: #f87171 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.6) !important;
+    }
+
+    /* Sound/Haptic Controls Header */
+    .controls-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .icon-btn.active {
+      color: #ffffff;
+      background: rgba(99, 102, 241, 0.3);
+      border-color: var(--primary);
+    }
+
+    /* Ad Section */
+    .ad-card {
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), rgba(24, 24, 53, 0.8));
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ad-illustration {
+      width: 64px;
+      height: 64px;
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-action {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), #8b5cf6);
+      border: none;
+      color: #ffffff;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-action:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-action:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(0.6);
+    }
+
+    /* Wallet Section */
+    .wallet-hero {
+      background: linear-gradient(135deg, #b45309, #d97706, #f59e0b);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      color: #ffffff;
+      box-shadow: 0 10px 30px rgba(217, 119, 6, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wallet-hero::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      bottom: -30px;
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .conversion-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .conv-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm);
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 0.8rem;
+    }
+
+    .conv-box strong {
+      display: block;
+      color: #fde68a;
+      font-size: 0.95rem;
+      margin-bottom: 2px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1.5px solid var(--card-border);
+      color: #ffffff;
+      padding: 13px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+    }
+
+    .amount-chips {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0 16px 0;
+    }
+
+    .amount-chip {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 9px 4px;
+      text-align: center;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .amount-chip.active {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: var(--primary);
+      color: #c7d2fe;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--card-border);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+    }
+
+    .status-pill {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    /* Modal / Popup for Simulated Ad */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-content {
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .modal-progress {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .modal-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ec4899, #8b5cf6);
+      transition: width 0.1s linear;
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 2000;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- Header Bar -->
+    <header class="header-bar">
+      <div class="brand-title">
+        <span>⚡ Math Rewards</span>
+      </div>
+      <div class="controls-row">
+        <button id="soundToggle" class="icon-btn active" title="Toggle Sound">🔊</button>
+        <button id="vibrateToggle" class="icon-btn active" title="Toggle Haptics">📳</button>
+        <div class="coin-badge">
+          <span class="coin-icon">¢</span>
+          <span id="headerCoinCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="quizTab">🎮 Math Quiz</button>
+      <button class="tab-btn" data-tab="adsTab">🎁 Bonus Video</button>
+      <button class="tab-btn" data-tab="walletTab">💳 Wallet Store</button>
+    </nav>
+
+    <!-- TAB 1: Math Quiz -->
+    <main id="quizTab" class="tab-pane active">
+      
+      <!-- Category Chips -->
+      <div class="category-group">
+        <button class="cat-chip selected" data-cat="all">All (Mix)</button>
+        <button class="cat-chip" data-cat="add">Add (+)</button>
+        <button class="cat-chip" data-cat="sub">Sub (−)</button>
+        <button class="cat-chip" data-cat="mul">Mul (×)</button>
+      </div>
+
+      <!-- Main Game Card -->
+      <section class="card">
+        <div class="quiz-stats">
+          <span>Question: <strong id="questionNumber">1/30</strong></span>
+          <div class="stat-badge">
+            <span>🔥 Streak: </span><span id="streakCount">0</span>
+          </div>
+          <span>Best: <strong id="highScore">0</strong></span>
+        </div>
+
+        <!-- 15s Timer Bar -->
+        <div class="timer-container">
+          <div id="timerBar" class="timer-bar"></div>
+        </div>
+
+        <!-- Question Display Card -->
+        <div class="question-card">
+          <div class="question-prompt">Solve arithmetic challenge (+5 Coins)</div>
+          <div id="questionExpr" class="question-expr">8 + 5 = ?</div>
+          <div id="feedbackBanner" class="feedback-banner"></div>
+        </div>
+
+        <!-- 4 Option Buttons -->
+        <div class="options-grid">
+          <button class="option-btn" id="opt0">13</button>
+          <button class="option-btn" id="opt1">12</button>
+          <button class="option-btn" id="opt2">15</button>
+          <button class="option-btn" id="opt3">14</button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- TAB 2: Bonus Video Ad -->
+    <section id="adsTab" class="tab-pane">
+      <div class="card ad-card">
+        <div class="ad-illustration">🎬</div>
+        <div>
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">Bonus Video Reward</h2>
+          <p style="color: var(--text-muted); font-size: 0.88rem;">Watch a quick 5-second simulated video to claim 20 Game Coins!</p>
+        </div>
+
+        <div style="width: 100%; display: flex; justify-content: space-around; background: rgba(0,0,0,0.25); padding: 10px; border-radius: var(--radius-sm); font-size: 0.85rem;">
+          <div>Today's Views: <strong id="adsTodayCount">0 / 15</strong></div>
+          <div>Cooldown: <strong id="cooldownLabel">Ready</strong></div>
+        </div>
+
+        <button id="watchAdBtn" class="btn-action">
+          <span>▶ Watch Video Ad (+20 Coins)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB 3: Wallet Store -->
+    <section id="walletTab" class="tab-pane">
+      <!-- Wallet Hero Banner -->
+      <div class="wallet-hero">
+        <span style="font-size: 0.85rem; font-weight: 700; opacity: 0.9;">Available Balance</span>
+        <div style="display: flex; align-items: baseline; gap: 8px;">
+          <h1 id="walletBalanceText" style="font-size: 2.2rem; font-weight: 900;">0</h1>
+          <span style="font-size: 1.1rem; font-weight: 700;">Coins</span>
+        </div>
+        <p style="font-size: 0.8rem; opacity: 0.85;">Minimum redemption threshold is 1,000 Coins (₹10).</p>
+      </div>
+
+      <!-- Conversion Tiers -->
+      <div class="card">
+        <h3 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 8px;">Coin Value Conversion</h3>
+        <div class="conversion-grid">
+          <div class="conv-box">
+            <strong>₹10</strong>
+            <span>1,000 Coins</span>
+          </div>
+          <div class="conv-box">
+            <strong>₹50</strong>
+            <span>5,000 Coins</span>
+          </div>
+          <div class="conv-box">
+            <strong>₹100</strong>
+            <span>10,000 Coins</span>
+          </div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Select Amount:</label>
+          <div class="amount-chips">
+            <div class="amount-chip active" data-amount="1000" data-inr="10">₹10 (1k)</div>
+            <div class="amount-chip" data-amount="5000" data-inr="50">₹50 (5k)</div>
+            <div class="amount-chip" data-amount="10000" data-inr="100">₹100 (10k)</div>
+          </div>
+
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">UPI ID:</label>
+          <input type="text" id="upiInput" class="input-field" placeholder="e.g. name@bank or 9876543210@upi">
+
+          <button id="withdrawBtn" class="btn-action" style="margin-top: 14px;">
+            <span>Submit Withdrawal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Withdrawal History -->
+      <div class="card">
+        <h3 style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px;">Recent Redemption Requests</h3>
+        <div id="historyList" class="history-list">
+          <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 12px;">No redemption requests yet.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Simulated Rewarded Ad Modal -->
+  <div id="adModal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #a5b4fc; font-weight: 800;">Simulated Rewarded Video</div>
+      <div style="width: 100%; height: 160px; background: #1e1b4b; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+        <div style="font-size: 38px;">🎮</div>
+        <div style="font-weight: 800; color: #fbcfe8;">Math Fun Game Demo</div>
+        <div id="adCountdownText" style="font-size: 0.85rem; color: #cbd5e1;">Reward in 5s…</div>
+      </div>
+      <div class="modal-progress">
+        <div id="modalProgressBar" class="modal-progress-bar"></div>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted);">Please wait for the simulated video to complete to claim your 20 Game Coins.</p>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span id="toastIcon">✨</span>
+    <span id="toastMsg">Coins added!</span>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       Sound & Web Audio API Engine
+       ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.12, gainVal = 0.15) {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+        gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      }
+
+      playCorrect() {
+        if (!this.enabled) return;
+        this.playTone(523.25, 'sine', 0.1, 0.2); // C5
+        setTimeout(() => this.playTone(659.25, 'sine', 0.15, 0.2), 80); // E5
+        setTimeout(() => this.playTone(783.99, 'sine', 0.2, 0.25), 160); // G5
+      }
+
+      playWrong() {
+        if (!this.enabled) return;
+        this.playTone(180, 'sawtooth', 0.25, 0.18);
+        setTimeout(() => this.playTone(130, 'sawtooth', 0.3, 0.2), 100);
+      }
+
+      playBonusReward() {
+        if (!this.enabled) return;
+        [440, 554, 659, 880].forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 'triangle', 0.2, 0.25), idx * 75);
+        });
+      }
+    }
+
+    const sound = new SoundEngine();
+    let vibrationEnabled = true;
+
+    function vibrate(pattern) {
+      if (vibrationEnabled && navigator.vibrate) {
+        try { navigator.vibrate(pattern); } catch (e) {}
+      }
+    }
+
+    /* ==========================================================================
+       Data State & LocalStorage Management
+       ========================================================================== */
+    const STORAGE_KEY = 'math_rewards_save_v1';
+
+    const defaultState = {
+      coins: 100,
+      highScore: 0,
+      streak: 0,
+      totalAnswered: 0,
+      adsWatchedCount: 0,
+      lastAdTimestamp: 0,
+      withdrawRequests: []
+    };
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return { ...defaultState, ...JSON.parse(raw) };
+      } catch (e) {
+        console.warn('Storage read warning:', e);
+      }
+      return { ...defaultState };
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Storage write warning:', e);
+      }
+      updateUI();
+    }
+
+    const state = loadState();
+
+    /* ==========================================================================
+       UI Elements
+       ========================================================================== */
+    const headerCoinCount = document.getElementById('headerCoinCount');
+    const walletBalanceText = document.getElementById('walletBalanceText');
+    const questionNumberEl = document.getElementById('questionNumber');
+    const streakCountEl = document.getElementById('streakCount');
+    const highScoreEl = document.getElementById('highScore');
+    const timerBarEl = document.getElementById('timerBar');
+    const questionExprEl = document.getElementById('questionExpr');
+    const feedbackBannerEl = document.getElementById('feedbackBanner');
+    const optButtons = [
+      document.getElementById('opt0'),
+      document.getElementById('opt1'),
+      document.getElementById('opt2'),
+      document.getElementById('opt3')
+    ];
+
+    const adsTodayCountEl = document.getElementById('adsTodayCount');
+    const cooldownLabelEl = document.getElementById('cooldownLabel');
+    const watchAdBtn = document.getElementById('watchAdBtn');
+    const adModal = document.getElementById('adModal');
+    const adCountdownText = document.getElementById('adCountdownText');
+    const modalProgressBar = document.getElementById('modalProgressBar');
+
+    const upiInput = document.getElementById('upiInput');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const historyList = document.getElementById('historyList');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    const toastIcon = document.getElementById('toastIcon');
+
+    let currentCategory = 'all';
+    let currentQuestion = null;
+    let timerInterval = null;
+    const QUESTION_TIME_LIMIT = 15;
+    let timeRemaining = QUESTION_TIME_LIMIT;
+    let isQuestionLocked = false;
+    let selectedWithdrawCoins = 1000;
+    let selectedWithdrawInr = 10;
+
+    /* ==========================================================================
+       Toast Helpers
+       ========================================================================== */
+    let toastTimeout = null;
+    function showToast(msg, icon = '✨') {
+      toastMsg.textContent = msg;
+      toastIcon.textContent = icon;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2600);
+    }
+
+    /* ==========================================================================
+       Arithmetic Question Generator
+       ========================================================================== */
+    function generateQuestion(category = 'all') {
+      let op = category;
+      if (op === 'all') {
+        const ops = ['add', 'sub', 'mul'];
+        op = ops[Math.floor(Math.random() * ops.length)];
+      }
+
+      let num1, num2, answer, expr;
+
+      if (op === 'add') {
+        num1 = Math.floor(Math.random() * 20) + 2;
+        num2 = Math.floor(Math.random() * 15) + 1;
+        answer = num1 + num2;
+        expr = `${num1} + ${num2} = ?`;
+      } else if (op === 'sub') {
+        num1 = Math.floor(Math.random() * 25) + 6;
+        num2 = Math.floor(Math.random() * (num1 - 1)) + 1;
+        answer = num1 - num2;
+        expr = `${num1} − ${num2} = ?`;
+      } else {
+        // Multiplication (tables 2-9)
+        num1 = Math.floor(Math.random() * 8) + 2;
+        num2 = Math.floor(Math.random() * 8) + 2;
+        answer = num1 * num2;
+        expr = `${num1} × ${num2} = ?`;
+      }
+
+      // Generate 3 unique nearby options
+      const optionsSet = new Set();
+      optionsSet.add(answer);
+
+      const deltas = [-3, -2, -1, 1, 2, 3, -5, 5, -10, 10];
+      deltas.sort(() => Math.random() - 0.5);
+
+      for (const d of deltas) {
+        const cand = answer + d;
+        if (cand >= 0 && cand !== answer) {
+          optionsSet.add(cand);
+        }
+        if (optionsSet.size === 4) break;
+      }
+
+      let step = 1;
+      while (optionsSet.size < 4) {
+        optionsSet.add(Math.max(0, answer + step));
+        step++;
+      }
+
+      const options = Array.from(optionsSet).sort(() => Math.random() - 0.5);
+
+      return { expr, answer, options };
+    }
+
+    /* ==========================================================================
+       Timer Logic
+       ========================================================================== */
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeRemaining = QUESTION_TIME_LIMIT;
+      updateTimerUI();
+
+      timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerUI();
+
+        if (timeRemaining <= 0) {
+          clearInterval(timerInterval);
+          handleTimeout();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const pct = (timeRemaining / QUESTION_TIME_LIMIT) * 100;
+      timerBarEl.style.width = `${pct}%`;
+
+      timerBarEl.classList.remove('warning', 'danger');
+      if (timeRemaining <= 4) {
+        timerBarEl.classList.add('danger');
+      } else if (timeRemaining <= 8) {
+        timerBarEl.classList.add('warning');
+      }
+    }
+
+    function handleTimeout() {
+      if (isQuestionLocked) return;
+      isQuestionLocked = true;
+
+      sound.playWrong();
+      vibrate([100, 50, 100]);
+
+      feedbackBannerEl.textContent = "⏰ Time's Up! 0 Coins";
+      feedbackBannerEl.className = 'feedback-banner wrong';
+
+      // Highlight the correct answer
+      optButtons.forEach(btn => {
+        btn.disabled = true;
+        if (parseInt(btn.textContent, 10) === currentQuestion.answer) {
+          btn.classList.add('btn-correct');
+        }
+      });
+
+      state.streak = 0;
+      state.totalAnswered++;
+      saveState();
+
+      setTimeout(nextQuestion, 1200);
+    }
+
+    /* ==========================================================================
+       Quiz Flow
+       ========================================================================== */
+    function loadQuestion() {
+      isQuestionLocked = false;
+      currentQuestion = generateQuestion(currentCategory);
+
+      questionExprEl.textContent = currentQuestion.expr;
+      feedbackBannerEl.textContent = '';
+      feedbackBannerEl.className = 'feedback-banner';
+
+      questionNumberEl.textContent = `${(state.totalAnswered % 30) + 1}/30`;
+      streakCountEl.textContent = state.streak;
+      highScoreEl.textContent = state.highScore;
+
+      optButtons.forEach((btn, idx) => {
+        btn.disabled = false;
+        btn.className = 'option-btn';
+        btn.textContent = currentQuestion.options[idx];
+      });
+
+      startTimer();
+    }
+
+    function handleOptionClick(selectedBtn) {
+      if (isQuestionLocked) return;
+      isQuestionLocked = true;
+      clearInterval(timerInterval);
+
+      const chosenVal = parseInt(selectedBtn.textContent, 10);
+      const isCorrect = (chosenVal === currentQuestion.answer);
+
+      optButtons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+        selectedBtn.classList.add('btn-correct');
+        feedbackBannerEl.textContent = '🎉 Correct! +5 Coins';
+        feedbackBannerEl.className = 'feedback-banner correct';
+
+        sound.playCorrect();
+        vibrate([50, 30, 50]);
+
+        state.coins += 5;
+        state.streak += 1;
+        if (state.streak > state.highScore) {
+          state.highScore = state.streak;
+        }
+      } else {
+        selectedBtn.classList.add('btn-wrong');
+        feedbackBannerEl.textContent = '❌ Incorrect! 0 Coins';
+        feedbackBannerEl.className = 'feedback-banner wrong';
+
+        sound.playWrong();
+        vibrate([120, 60, 120]);
+
+        // Highlight correct option
+        optButtons.forEach(btn => {
+          if (parseInt(btn.textContent, 10) === currentQuestion.answer) {
+            btn.classList.add('btn-correct');
+          }
+        });
+
+        state.streak = 0;
+      }
+
+      state.totalAnswered++;
+      saveState();
+
+      setTimeout(nextQuestion, 1100);
+    }
+
+    function nextQuestion() {
+      loadQuestion();
+    }
+
+    /* ==========================================================================
+       Simulated Rewarded Video Ad
+       ========================================================================== */
+    const AD_COOLDOWN_MS = 30 * 1000; // 30s fast demo cooldown
+
+    function checkAdAvailability() {
+      const now = Date.now();
+      const elapsed = now - state.lastAdTimestamp;
+      const remaining = Math.max(0, AD_COOLDOWN_MS - elapsed);
+
+      if (state.adsWatchedCount >= 15) {
+        cooldownLabelEl.textContent = 'Limit (15/15)';
+        watchAdBtn.disabled = true;
+      } else if (remaining > 0) {
+        const secs = Math.ceil(remaining / 1000);
+        cooldownLabelEl.textContent = `${secs}s`;
+        watchAdBtn.disabled = true;
+      } else {
+        cooldownLabelEl.textContent = 'Ready';
+        watchAdBtn.disabled = false;
+      }
+    }
+
+    setInterval(checkAdAvailability, 1000);
+
+    function startRewardedAd() {
+      sound.init();
+      adModal.classList.add('active');
+      let countdown = 5;
+      adCountdownText.textContent = `Reward in ${countdown}s…`;
+      modalProgressBar.style.width = '0%';
+
+      const startTime = Date.now();
+      const totalDuration = 5000;
+
+      const progressInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const pct = Math.min(100, (elapsed / totalDuration) * 100);
+        modalProgressBar.style.width = `${pct}%`;
+
+        const secRemaining = Math.max(0, Math.ceil((totalDuration - elapsed) / 1000));
+        adCountdownText.textContent = `Reward in ${secRemaining}s…`;
+
+        if (elapsed >= totalDuration) {
+          clearInterval(progressInterval);
+          finishRewardedAd();
+        }
+      }, 50);
+    }
+
+    function finishRewardedAd() {
+      adModal.classList.remove('active');
+      state.coins += 20;
+      state.adsWatchedCount++;
+      state.lastAdTimestamp = Date.now();
+      saveState();
+
+      sound.playBonusReward();
+      vibrate([100, 50, 100, 50, 150]);
+      showToast('🎁 Claimed +20 Game Coins!', '💎');
+      checkAdAvailability();
+    }
+
+    /* ==========================================================================
+       Wallet & Withdrawal
+       ========================================================================== */
+    function handleWithdrawal() {
+      const upi = upiInput.value.trim();
+      const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
+
+      if (!upi || !upiRegex.test(upi)) {
+        showToast('Please enter a valid UPI ID (e.g. name@bank)', '⚠️');
+        vibrate(100);
+        return;
+      }
+
+      if (state.coins < selectedWithdrawCoins) {
+        showToast(`Insufficient balance! Need ${selectedWithdrawCoins} Coins`, '❌');
+        vibrate(120);
+        return;
+      }
+
+      state.coins -= selectedWithdrawCoins;
+      const newReq = {
+        id: 'REQ-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+        upi: upi,
+        coins: selectedWithdrawCoins,
+        inr: selectedWithdrawInr,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+        status: 'Pending'
+      };
+
+      state.withdrawRequests.unshift(newReq);
+      saveState();
+
+      sound.playBonusReward();
+      vibrate([50, 30, 50]);
+      showToast(`Redemption submitted for ₹${selectedWithdrawInr}!`, '✅');
+      upiInput.value = '';
+    }
+
+    /* ==========================================================================
+       UI Synchronization
+       ========================================================================== */
+    function updateUI() {
+      headerCoinCount.textContent = state.coins.toLocaleString();
+      walletBalanceText.textContent = state.coins.toLocaleString();
+      adsTodayCountEl.textContent = `${state.adsWatchedCount} / 15`;
+      streakCountEl.textContent = state.streak;
+      highScoreEl.textContent = state.highScore;
+
+      // Render Requests History
+      if (state.withdrawRequests.length === 0) {
+        historyList.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 12px;">No redemption requests yet.</p>';
+      } else {
+        historyList.innerHTML = state.withdrawRequests.map(r => `
+          <div class="history-item">
+            <div>
+              <div style="font-weight: 700; color: #ffffff;">₹${r.inr} (${r.coins} Coins)</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">${r.upi} • ${r.date}</div>
+            </div>
+            <span class="status-pill">${r.status}</span>
+          </div>
+        `).join('');
+      }
+
+      checkAdAvailability();
+    }
+
+    /* ==========================================================================
+       Event Listeners
+       ========================================================================== */
+    // Option Click Handlers
+    optButtons.forEach(btn => {
+      btn.addEventListener('click', () => handleOptionClick(btn));
+    });
+
+    // Navigation Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const target = btn.getAttribute('data-tab');
+        document.getElementById(target).classList.add('active');
+
+        sound.playTone(600, 'sine', 0.05, 0.08);
+      });
+    });
+
+    // Category Selector
+    document.querySelectorAll('.cat-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        currentCategory = chip.getAttribute('data-cat');
+        sound.playTone(700, 'sine', 0.05, 0.08);
+        loadQuestion();
+      });
+    });
+
+    // Sound and Haptic Toggles
+    const soundToggle = document.getElementById('soundToggle');
+    soundToggle.addEventListener('click', () => {
+      sound.enabled = !sound.enabled;
+      soundToggle.classList.toggle('active', sound.enabled);
+      soundToggle.textContent = sound.enabled ? '🔊' : '🔇';
+      showToast(sound.enabled ? 'Sound Enabled' : 'Sound Muted');
+    });
+
+    const vibrateToggle = document.getElementById('vibrateToggle');
+    vibrateToggle.addEventListener('click', () => {
+      vibrationEnabled = !vibrationEnabled;
+      vibrateToggle.classList.toggle('active', vibrationEnabled);
+      vibrateToggle.textContent = vibrationEnabled ? '📳' : '📴';
+      showToast(vibrationEnabled ? 'Vibration Enabled' : 'Vibration Disabled');
+      if (vibrationEnabled) vibrate(50);
+    });
+
+    // Rewarded Ad Button
+    watchAdBtn.addEventListener('click', startRewardedAd);
+
+    // Withdrawal Amount Chips
+    document.querySelectorAll('.amount-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.amount-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        selectedWithdrawCoins = parseInt(chip.getAttribute('data-amount'), 10);
+        selectedWithdrawInr = parseInt(chip.getAttribute('data-inr'), 10);
+        sound.playTone(650, 'sine', 0.05, 0.08);
+      });
+    });
+
+    withdrawBtn.addEventListener('click', handleWithdrawal);
+
+    // Initialize App
+    updateUI();
+    loadQuestion();
+  </script>
+</body>
+</html>
