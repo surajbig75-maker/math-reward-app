@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Math Rewards</string>
+
+    <!-- General Navigation & Headers -->
+    <string name="home_title">Math Quiz &amp; Rewards</string>
+    <string name="quiz_title">Math Challenge</string>
+    <string name="wallet_title">Wallet Store</string>
+    <string name="game_rules">Rules &amp; Fair Play</string>
+    <string name="available_balance_label">Available Balance</string>
+    <string name="available_balance_format">Available Balance: %1$d Coins</string>
+    <string name="game_coins_suffix">Coins</string>
+    <string name="coins_display_format">%1$d Coins</string>
+
+    <!-- Dashboard Actions & Cards -->
+    <string name="daily_quiz_card_title">Daily Math Quiz</string>
+    <string name="daily_quiz_card_desc">Solve simple arithmetic challenges to earn 5 game coins per correct answer!</string>
+    <string name="btn_start_quiz">Play Math Quiz</string>
+    <string name="quiz_progress_format">Daily Progress: %1$d / %2$d</string>
+
+    <string name="bonus_reward_card_title">Bonus Reward</string>
+    <string name="bonus_reward_card_desc">Watch Video for 10 Game Coins</string>
+    <string name="btn_claim_bonus">Claim Bonus Reward</string>
+    <string name="bonus_cooldown_format">Cooldown: %1$s</string>
+    <string name="bonus_daily_limit_format">Bonus views today: %1$d / %2$d</string>
+    <string name="bonus_limit_reached">Daily bonus limit reached (15/15)</string>
+    <string name="bonus_ready">Bonus Video Available!</string>
+    <string name="bonus_loading">Preparing video…</string>
+
+    <string name="wallet_store_card_title">Wallet &amp; Redemption</string>
+    <string name="wallet_store_card_desc">Redeem earned game coins directly via UPI</string>
+    <string name="btn_open_wallet">Open Wallet Store</string>
+
+    <!-- Quiz Activity Strings -->
+    <string name="question_number_format">Question %1$d of %2$d</string>
+    <string name="coins_earned_format">+%1$d Coins</string>
+    <string name="quiz_daily_limit_reached_title">Daily Limit Reached!</string>
+    <string name="quiz_daily_limit_reached_msg">You have completed all 30 questions for today. Come back tomorrow for fresh math challenges!</string>
+    <string name="btn_back_home">Return to Home</string>
+    <string name="quiz_correct_feedback">Correct! +5 Coins</string>
+    <string name="quiz_wrong_feedback">Incorrect! 0 Coins</string>
+    <string name="score_summary_format">Score: %1$d / %2$d correct</string>
+
+    <!-- Wallet Activity Strings -->
+    <string name="wallet_balance_header">Available Balance</string>
+    <string name="conversion_rate_title">Coin Value Conversion</string>
+    <string name="rate_1000">1,000 Coins = ₹10</string>
+    <string name="rate_5000">5,000 Coins = ₹50</string>
+    <string name="rate_10000">10,000 Coins = ₹100</string>
+    <string name="upi_id_label">Enter UPI ID</string>
+    <string name="upi_id_hint">e.g. name@bank or 9876543210@upi</string>
+    <string name="select_withdrawal_amount">Select Amount to Redeem</string>
+    <string name="option_10">₹10 (1,000 Coins)</string>
+    <string name="option_50">₹50 (5,000 Coins)</string>
+    <string name="option_100">₹100 (10,000 Coins)</string>
+    <string name="btn_submit_withdrawal">Submit Withdrawal</string>
+    <string name="min_threshold_note">Minimum redemption threshold is 1,000 Coins (₹10).</string>
+
+    <!-- Validations and Feedback -->
+    <string name="err_invalid_upi">Please enter a valid UPI ID (e.g. user@bank or number@upi)</string>
+    <string name="err_insufficient_coins">Insufficient coin balance for this request.</string>
+    <string name="err_min_threshold">Minimum withdrawal is 1,000 coins.</string>
+    <string name="withdrawal_success">Redemption request submitted successfully! Status: Pending</string>
+    <string name="withdrawal_processing">Processing request…</string>
+    <string name="recent_requests_title">Recent Redemption Requests</string>
+    <string name="no_requests_yet">No previous redemption requests.</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_approved">Approved</string>
+
+    <!-- Ad & Rules Strings -->
+    <string name="ad_not_ready">Bonus video is loading. Please try again in a moment.</string>
+    <string name="ad_reward_earned">Congratulations! You earned 10 Game Coins!</string>
+    <string name="ad_cooldown_active">Please wait for the cooldown timer to expire.</string>
+    <string name="rules_title">Game Guidelines &amp; Fair Play</string>
+    <string name="rules_content">• Daily Math Quiz: Max 30 arithmetic questions per day (5 coins each).\n• Bonus Rewards: Watch bonus video to receive 10 game coins (up to 15 per 24 hours with a 3-minute cooldown).\n• Redemptions: Convert game coins starting from 1,000 Coins (₹10) via standard UPI ID.</string>
+    <string name="btn_close">Close</string>
+</resources>

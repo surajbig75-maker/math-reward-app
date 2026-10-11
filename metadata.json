@@ -1,0 +1,6 @@
+{
+  "name": "Math Rewards",
+  "description": "Math Quiz and Rewards Game featuring arithmetic challenges, AdMob rewarded video ads with cooldown timers, and a wallet withdrawal system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

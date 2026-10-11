@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand / Primary (Modern Indigo Theme) -->
+    <color name="primary">#4F46E5</color>
+    <color name="primary_dark">#3730A3</color>
+    <color name="primary_light">#EEF2FF</color>
+    <color name="primary_container">#E0E7FF</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_primary_container">#1E1B4B</color>
+
+    <!-- Secondary (Royal Purple) -->
+    <color name="secondary">#7C3AED</color>
+    <color name="secondary_container">#F3E8FF</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_secondary_container">#3B0764</color>
+
+    <!-- Coin / Gold Accent -->
+    <color name="gold_primary">#F59E0B</color>
+    <color name="gold_dark">#D97706</color>
+    <color name="gold_light">#FEF3C7</color>
+    <color name="gold_glow">#FBBF24</color>
+
+    <!-- Game Status & Feedback Colors -->
+    <color name="quiz_correct">#10B981</color>
+    <color name="quiz_correct_light">#D1FAE5</color>
+    <color name="quiz_wrong">#EF4444</color>
+    <color name="quiz_wrong_light">#FEE2E2</color>
+
+    <!-- Background and Surface -->
+    <color name="background_light">#F8FAFC</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_variant">#F1F5F9</color>
+    <color name="surface_card">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="text_on_dark">#FFFFFF</color>
+
+    <!-- Borders & Dividers -->
+    <color name="divider_color">#E2E8F0</color>
+    <color name="card_stroke">#CBD5E1</color>
+
+    <!-- Neutral & Essentials -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>

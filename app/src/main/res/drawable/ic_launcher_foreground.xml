@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Golden Coin Badge Outer Ring (Center: 54, 54, Radius: 25) -->
+    <path
+        android:pathData="M54,54m-26,0a26,26 0 1,1 52,0a26,26 0 1,1 -52,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="28"
+                android:startY="28"
+                android:endX="80"
+                android:endY="80"
+                android:type="linear">
+                <item android:color="#FBBF24" android:offset="0.0" />
+                <item android:color="#F59E0B" android:offset="0.5" />
+                <item android:color="#D97706" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Golden Coin Inner Plate (Radius: 21) -->
+    <path
+        android:pathData="M54,54m-21,0a21,21 0 1,1 42,0a21,21 0 1,1 -42,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="33"
+                android:startY="33"
+                android:endX="75"
+                android:endY="75"
+                android:type="linear">
+                <item android:color="#FEF3C7" android:offset="0.0" />
+                <item android:color="#FDE68A" android:offset="0.6" />
+                <item android:color="#FBBF24" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Coin Bevel Highlight Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.2"
+        android:strokeAlpha="0.6"
+        android:pathData="M54,54m-19,0a19,19 0 1,1 38,0a19,19 0 1,1 -38,0" />
+
+    <!-- Center Math Symbols in Quadrants on the Coin -->
+    <!-- Top-Left: Plus (+) sign -->
+    <path
+        android:fillColor="#78350F"
+        android:pathData="M44.5,42h3v2h-3v3h-2v-3h-3v-2h3v-3h2z" />
+
+    <!-- Top-Right: Multiply (×) sign -->
+    <path
+        android:fillColor="#78350F"
+        android:pathData="M60.5,39.5l2.2,2.2l2.2,-2.2l1.6,1.6l-2.2,2.2l2.2,2.2l-1.6,1.6l-2.2,-2.2l-2.2,2.2l-1.6,-1.6l2.2,-2.2l-2.2,-2.2z" />
+
+    <!-- Bottom-Left: Minus (−) sign -->
+    <path
+        android:fillColor="#78350F"
+        android:pathData="M39.5,62.5h8v2.2h-8z" />
+
+    <!-- Bottom-Right: Equals (=) or Division sign -->
+    <path
+        android:fillColor="#78350F"
+        android:pathData="M60.5,60.5h8v2h-8zm0,4h8v2h-8z" />
+
+    <!-- Center Accent Diamond / Star -->
+    <path
+        android:fillColor="#B45309"
+        android:pathData="M54,50.5l2,3.5l3.5,2l-3.5,2l-2,3.5l-2,-3.5l-3.5,-2l3.5,-2z" />
+
+</vector>
